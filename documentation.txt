@@ -1,0 +1,17 @@
+--Dashboard back
+
+1. Connection db creacion de model realizada. 
+2. Implementar logica creacion de usuario. Cada uno tendra roles, el usuario principal se creeara de forma que sea el unico capaz de general roles en los usurios consumidores de forma cliente . DONEE
+3. Creacion de autenticacion con email y generando token. Seria bueno que el token devuelva tambien el rol asi evitamos una busqueda en la base de datos. 
+Continuar con el paso 4, ya realice endpoint que recoge mi data user, ya realice el middleware auth y demas 
+4. Creacion de modelo producto el cual genere luego proximas estadisticas, analizis de venta y demas. Esto solo podra realizarlo el usuario admin
+·$·$""·$"  REMEMBER.
+CREAR CRUD COMPLETO DEL MODELO USER ASI PUEDO MODIFICAR DATOS DEL USER  done
+USERS ====== EMPLEADOS COMPAÑEROS Y UN ADMIN DE PRINCIPIO
+·$·$·$·$·PRODUCTOS·$·$·$·$·$
+EN CREATE PRODUCT: aplicar logica de busqueda de ese producto con ese nombre para que si ese producto ya existe no lo cree de nuevo sino que sume uno al stock del que ya hay  DONEE
+
+CREAR CRUD DE PRODUCT  DONE!!!
+Ya cree el supplier model, ahora tengo que continuar con el crud de los supplier ;) :D
+ESTO PROXIMO HACER Y CHEQUEAR QUE OTROS MODELOS CREAR ;)
+FIJARME SI EN EL PRODUCTO AGREGAR UN CREADO POR ID USER PARA DESCRIBIR QUIEN SUBIO ESE PRODUCTO A LA BASE DE DATOS
