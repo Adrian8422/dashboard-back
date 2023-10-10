@@ -12,6 +12,42 @@ USERS ====== EMPLEADOS COMPAÑEROS Y UN ADMIN DE PRINCIPIO
 EN CREATE PRODUCT: aplicar logica de busqueda de ese producto con ese nombre para que si ese producto ya existe no lo cree de nuevo sino que sume uno al stock del que ya hay  DONEE
 
 CREAR CRUD DE PRODUCT  DONE!!!
-Ya cree el supplier model, ahora tengo que continuar con el crud de los supplier ;) :D
-ESTO PROXIMO HACER Y CHEQUEAR QUE OTROS MODELOS CREAR ;)
-FIJARME SI EN EL PRODUCTO AGREGAR UN CREADO POR ID USER PARA DESCRIBIR QUIEN SUBIO ESE PRODUCTO A LA BASE DE DATOS
+Ya cree el supplier model, ahora tengo que continuar con  el crud de los supplier ;) :D
+Crear delete supplier /(&(#/"!$&(!/"$%!/("$))))DONEEE
+
+DEJAR LOS ENDPOINTS BIEN REALIZADOS CON EL CACH DE ERRORES CON BUENAS PRACTICAS COMO ESTA EN EL DELETESUPPLIER %$&%$%&$%&$%&& DONEEEE!
+
+NEXT!$#$#
+continuar con proximos modelos categorie and ventas
+
+
+TENGO QUE AGREGAR AUTH MIDDLEWARE A TODOS LOS ENDPOINTS PARA EL ROL CLIENTE TAMBIEN, QUE PUEDA VER LOS PRODUCTOS
+ if (!req.user) {
+      res.status(401).send({ error: "User not found" });
+      return new Error("User not found");
+    }
+    
+    continuar con modelo ventas :DDD
+    LUEGO CONTINUAR CON EL MODELO CATEGORIES
+
+
+
+!!!!!!!!!!!!!!!!!CONTINUAR CON ESTO
+
+
+/&(&()/))=()= CREAR DELETE DE CATEGORIE
+%&$&&%$%& TENGO QUE AGREGAR EL MIDDLEWARE QUE SE FIJE QUE ROLE TIENE ASI NO REPITO ESA LOGICA EN TODOS LOS ENDPOINTS. done
+
+
+CREAR middleware QUE SE ENCARGUE DE VERIFICAR ROL DEL USER 'ADMIN' OR 'CLIENT' done
+
+ESTO PROXIMO HACER Y CHEQUEAR QUE OTROS MODELOS CREAR ;) 
+
+modelo sale ver como crear este endpont deberia ser un webhook que el gateway de pago acceda para generar la compra ;)
+
+
+
+TERMINAR CREATE SALES ESTOY CON EL BODY DE POSTMAN
+
+
+FIJARME SI EN EL CREATE SALE USAR QUERY O PARAMS PARA TRAER ID DEL P´RODUCTO CON EL CUAL PODEMOS CREAR EL SALE 
