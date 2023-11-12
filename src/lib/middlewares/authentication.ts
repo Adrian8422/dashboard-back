@@ -9,7 +9,7 @@ export async function authMiddleware(req: any, res: any, next: any) {
     const token = requestAuth.split(" ")[1];
     if (!requestAuth) throw new Error("Token not found");
     const tokenVerified: any = jwt.verify(token, secret);
-    console.log(tokenVerified);
+    console.log("Token verified", tokenVerified);
     const queryToDatabase = await User.findOne({
       where: { email: tokenVerified.user.email },
     });

@@ -1,6 +1,16 @@
 import { Categorie } from "../models/categorie";
 
 export const createCategorie = async (data: any) => {
+  const findCategorie = await Categorie.findOne({
+    where: {
+      name: data.name,
+    },
+  });
+  if (findCategorie)
+    throw new Error(
+      "We did not create this supplier, because it already exists"
+    );
+
   const newCategorie = await Categorie.create(data);
   if (!newCategorie) throw new Error("We can't create this categorie");
   return newCategorie;

@@ -41,8 +41,8 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.json());
-
 app.use(cors());
+
 // SECTION USER
 app.post("/signup", async (req, res) => {
   const { email, age, rol } = req.body;
@@ -61,7 +61,7 @@ app.post("/signin", async (req: any, res) => {
 });
 app.get("/me", authMiddleware, async (req: any, res) => {
   try {
-    if (!req.user || req.user.rol !== "admin") {
+    if (!req.user) {
       res
         .status(401)
         .send({ error: "User not found or your admin role isn't" });
@@ -82,7 +82,7 @@ app.get("/me", authMiddleware, async (req: any, res) => {
 // In this endpoint we can modified only the global data, we can't modify fields such as 'email' and 'rol'
 app.patch("/update-user", authMiddleware, async (req: any, res) => {
   try {
-    if (!req.user || req.user.rol !== "admin") {
+    if (!req.user) {
       res
         .status(401)
         .send({ error: "User not found or your admin role isn't" });
@@ -359,6 +359,11 @@ app.post("/create-categorie", authMiddleware, async (req: any, res) => {
   } catch (error: any) {
     if (error.message == "We can't create this categorie") {
       res.status(400).send({ error: error.message });
+    } else if (
+      error.message ==
+      "We did not create this supplier, because it already exists"
+    ) {
+      res.status(401).send({ error: error.message });
     } else {
       console.log("entro aqui? :D");
       res.status(500).send({ error: error.message });

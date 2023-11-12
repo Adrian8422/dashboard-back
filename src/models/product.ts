@@ -11,7 +11,7 @@ Product.init(
     price: DataTypes.INTEGER,
     stock: DataTypes.INTEGER,
     supplierName: DataTypes.STRING,
-    categoriesId: DataTypes.STRING,
+    categoriesName: DataTypes.STRING,
     createdAt: DataTypes.DATE,
   },
   { sequelize, modelName: "product" }
