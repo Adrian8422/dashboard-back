@@ -45,19 +45,28 @@ app.use(cors());
 
 // SECTION USER
 app.post("/signup", async (req, res) => {
-  const { email, age, rol } = req.body;
+  const { email, age, rol, name, lastname } = req.body;
 
-  const createUser = await sendCode(email);
+  const createUser = await sendCode({ email, age, name, lastname });
 
   res.send(createUser);
 });
 app.post("/signin", async (req: any, res) => {
-  const { email, code } = req.body;
-  const response = await signInUser(email, code).catch((err) =>
-    res.status(401).send(err)
-  );
-
-  res.send(response);
+  try {
+    const { email, code } = req.body;
+    const response = await signInUser(email, code);
+    res.send(response);
+  } catch (error: any) {
+    if (error.message == "Auth not found or throw code") {
+      res.status(404).send({ error: error.message });
+    } else if (error.message == "Code expired, please generate a new code") {
+      res.status(401).send({ error: error.message });
+    } else if (
+      error.message == "Throw verification, please generate a new code"
+    ) {
+      res.status(400).send({ error: error.message });
+    } else res.status(500).send({ error: error.message });
+  }
 });
 app.get("/me", authMiddleware, async (req: any, res) => {
   try {

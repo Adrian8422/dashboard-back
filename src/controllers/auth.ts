@@ -5,13 +5,16 @@ import { User } from "../models/user";
 import { send } from "../lib/connection/nodemailer";
 import { expiredCode } from "../lib/functions/expiredCode";
 import { Auth } from "../models/auth";
-
-export const findUserOrCreateUser = async (
-  email: string,
-  age?: number,
-  rol?: string
-) => {
-  if (!email) throw "You should provide a email";
+type DataBodySignUp = {
+  email: string;
+  name?: string;
+  lastname?: string;
+  age?: number;
+  rol?: string;
+};
+export const findUserOrCreateUser = async (data: DataBodySignUp) => {
+  const { email, name, lastname, age, rol } = data;
+  if (!data?.email) throw "You should provide a email";
   const auth = await Auth.findOne({ where: { email } });
 
   // In this step, we look up a registration with rol 'admin', if there is some register with this rol, we automatically assign in the field rol the value 'client'
@@ -23,6 +26,8 @@ export const findUserOrCreateUser = async (
         where: { email },
         defaults: {
           email,
+          name,
+          lastname,
           age: "",
           rol: "client",
         },
@@ -58,14 +63,14 @@ export const findUserOrCreateUser = async (
   return auth;
 };
 
-export const sendCode = async (email: string) => {
-  const auth = await findUserOrCreateUser(email);
+export const sendCode = async (data: any) => {
+  const auth = await findUserOrCreateUser(data);
   if (!auth) throw "User not found";
 
   const verification_code = generateRandomCode();
   const expiration_code = addMinutes(new Date(), 20);
 
-  await send(email, verification_code);
+  await send(data.email, verification_code);
 
   // Update the verification code regardless of whether the user was created or not, also update the expiration code
   const userModificado = await auth.update({
@@ -81,29 +86,26 @@ export const sendCode = async (email: string) => {
 };
 
 export const signInUser = async (email: string, code: number) => {
-  try {
-    const auth = await Auth.findOne({
-      where: { email, verification_code: code },
-    });
-    if (!auth) throw "Auth not found";
-    const { expiration_code } = auth?.dataValues;
+  const auth = await Auth.findOne({
+    where: { email, verification_code: code },
+  });
+  if (!auth) throw new Error("Auth not found or throw code");
+  const { expiration_code } = auth?.dataValues;
 
-    const expired = await expiredCode(expiration_code);
-    if (expired) {
-      auth?.dataValues.verification_code == null;
-      auth?.dataValues.expiration_code == new Date();
-      auth?.save();
-      throw "Code expired, please generate a new code";
-    }
-    if (auth?.dataValues.verification_code == code && !expired) {
-      const token = generateToken({
-        id: auth?.dataValues.id,
-        email: auth?.dataValues.email,
-        rol: auth?.dataValues.rol,
-      });
-      return token;
-    } else throw "Throw verification, please generate a new code";
-  } catch (error) {
-    return error;
+  const expired = await expiredCode(expiration_code);
+  if (expired) {
+    auth?.dataValues.verification_code == null;
+    auth?.dataValues.expiration_code == new Date();
+    auth?.save();
+    throw new Error("Code expired, please generate a new code");
   }
+
+  if (auth?.dataValues.verification_code == code && !expired) {
+    const token = generateToken({
+      id: auth?.dataValues.id,
+      email: auth?.dataValues.email,
+      rol: auth?.dataValues.rol,
+    });
+    return token;
+  } else throw new Error("Throw verification, please generate a new code");
 };

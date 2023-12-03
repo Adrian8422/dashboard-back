@@ -1,3 +1,4 @@
+import { Categorie } from "../models/categorie";
 import { Product } from "../models/product";
 import { Supplier } from "../models/supplier";
 type InputValueProduct = {
@@ -36,6 +37,13 @@ export const createProduct = async (data: any) => {
     });
     newProduct.dataValues.supplierId = supplier.dataValues.id;
     await newProduct.save();
+    const [categorie, creted] = await Categorie.findOrCreate({
+      where: {
+        name: newProduct.dataValues.categoriesName,
+      },
+      defaults: { name: newProduct.dataValues.categoriesName },
+    });
+    newProduct.dataValues.categoriesName = categorie.dataValues.name;
 
     return newProduct.dataValues;
   } catch (error) {
