@@ -2,7 +2,12 @@ import express, { Request, Response } from "express";
 
 import cors from "cors";
 import { sequelize } from "./lib/connection/db/postgres";
-import { findUserOrCreateUser, sendCode, signInUser } from "./controllers/auth";
+import {
+  changeRol,
+  findUserOrCreateUser,
+  sendCode,
+  signInUser,
+} from "./controllers/auth";
 import {
   authMiddleware,
   checkAdminMiddleware,
@@ -35,7 +40,17 @@ import {
   allSales,
   getSaleId,
   deleteSale,
+  getSalesPerDay,
 } from "./controllers/sales";
+import {
+  completeTask,
+  createTask,
+  deleteTask,
+  getTaskId,
+  getTasks,
+  updateTask,
+} from "./controllers/tasks";
+import { getNotifications } from "./controllers/notification";
 
 const port = process.env.PORT || 3000;
 
@@ -116,6 +131,30 @@ app.patch("/update-user", authMiddleware, async (req: any, res) => {
     }
   }
 });
+
+app.patch(
+  "/change-rol/:id",
+  authMiddleware,
+  checkAdminMiddleware,
+  async (req: any, res) => {
+    try {
+      console.log(req.user);
+      const { id } = req.params;
+      const { rol } = req.body;
+      console.log(id, rol);
+
+      const response = await changeRol(id, rol);
+      res.send(response);
+    } catch (error: any) {
+      if (error.message == "Throw values rol")
+        res.status(402).send({ error: error.message });
+      else if (error.message == "User not found")
+        res.status(404).send({ error: error.message });
+      else res.status(500).send({ error: error.message });
+    }
+  }
+);
+
 // SECTION PRODUCT
 
 app.get("/products", authMiddleware, async (req: any, res) => {
@@ -465,6 +504,16 @@ app.get("/sales", authMiddleware, async (req, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
+app.get("/sales-per-day", authMiddleware, async (req, res) => {
+  try {
+    const sales = await getSalesPerDay();
+    res.send(sales);
+  } catch (error: any) {
+    if (error.message == "Sales not found")
+      res.status(404).send({ error: error.message });
+    else res.status(500).send({ error: error.message });
+  }
+});
 app.get("/sale/:id", authMiddleware, async (req: any, res) => {
   try {
     const { id } = req.params;
@@ -541,6 +590,113 @@ app.delete(
     }
   }
 );
+// TASKS SECTION
+
+app.post(
+  "/create-task",
+  authMiddleware,
+  checkAdminMiddleware,
+  async (req: any, res) => {
+    try {
+      const { email } = req.user;
+      const data = req.body;
+      const response = await createTask(data, email);
+      res.send(response);
+    } catch (error: any) {
+      if (error.message == "You need to be login")
+        res.status(401).send({ error: error.message });
+      else if (error.message == "We could't create this task")
+        res.status(402).send({ error: error.message });
+      else res.status(500).send({ error: error.message });
+    }
+  }
+);
+app.patch(
+  "/update-task/:id",
+  authMiddleware,
+  checkAdminMiddleware,
+  async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      const { email } = req.user;
+      const data = req.body;
+      const response = await updateTask(id, data, email);
+      res.send(response);
+    } catch (error: any) {
+      if (error.message == "You need to be login")
+        res.status(401).send({ error: error.message });
+      else if (error.message == "Not found this task")
+        res.status(402).send({ error: error.message });
+      else if (error.message == "User not created this task")
+        res.status(402).send({ error: error.message });
+      else res.status(500).send({ error: error.message });
+    }
+  }
+);
+app.get("/tasks", authMiddleware, async (req: any, res) => {
+  try {
+    const response = await getTasks();
+
+    res.send(response);
+  } catch (error: any) {
+    if (error.message) res.status(404).send({ error: error.message });
+    else if (!req.user) res.status(401).send({ error: "Unauthorized" });
+    else res.status(500).send({ error: error.message });
+  }
+});
+app.get("/task/:id", authMiddleware, async (req: any, res) => {
+  console.log(req.user);
+  try {
+    const { id } = req.params;
+    const response = await getTaskId(id);
+
+    res.send(response);
+  } catch (error: any) {
+    if (error.message == "There isn't task")
+      res.status(404).send({ error: error.message });
+    else if (!req.user) res.status(401).send({ error: "Unauthorized" });
+    else res.status(500).send({ error: error.message });
+  }
+});
+app.delete("/delete-task/:id", authMiddleware, async (req: any, res) => {
+  console.log(req.user);
+  try {
+    const { id } = req.params;
+    const response = await deleteTask(id);
+
+    res.send(response.message);
+  } catch (error: any) {
+    if (error.message == "There isn't task")
+      res.status(404).send({ error: error.message });
+    else if (!req.user) res.status(401).send({ error: "Unauthorized" });
+    else res.status(500).send({ error: error.message });
+  }
+});
+app.patch("/task-done/:id", authMiddleware, async (req: any, res) => {
+  console.log(req.user);
+  try {
+    const { done } = req.body;
+    const { id } = req.params;
+    const response = await completeTask(id, done);
+
+    res.send(response);
+  } catch (error: any) {
+    if (error.message == "Task not found")
+      res.status(404).send({ error: error.message });
+    else if (!req.user) res.status(401).send({ error: "Unauthorized" });
+    else res.status(500).send({ error: error.message });
+  }
+});
+app.get("/notifications", authMiddleware, async (req, res) => {
+  try {
+    const response = await getNotifications();
+    res.send(response);
+  } catch (error: any) {
+    if (error.message == "Notificatios not found")
+      res.status(404).send({ error: error.message });
+    else res.status(500).send({ error: error.message });
+  }
+});
 app.listen(port, () =>
   console.log("service connected http://localhost:" + port)
 );

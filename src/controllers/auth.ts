@@ -109,3 +109,16 @@ export const signInUser = async (email: string, code: number) => {
     return token;
   } else throw new Error("Throw verification, please generate a new code");
 };
+
+export const changeRol = async (id: string, rol: string) => {
+  console.log("rol controller", rol);
+  if (rol !== "client" && rol !== "admin")
+    throw new Error("Throw in value rol");
+  const user = await User.findByPk(id);
+  if (!user) throw new Error("User not found");
+  await user.update({
+    rol,
+  });
+  await user.save();
+  return user;
+};

@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Product } from "../models/product";
 import { Sale } from "../models/sale";
 
@@ -25,10 +26,38 @@ export const createSale = async (productId: string, dataValues: any) => {
   return newSale;
 };
 export const allSales = async () => {
-  const sales = await Sale.findAll();
+  const sales = await Sale.findAll({ order: [["createdAt", "ASC"]] });
+  const ventasPorMes: any = {};
+
+  sales.forEach((sale: any) => {
+    const month = moment(sale.createdAt).format("YYYY-MM");
+    if (!ventasPorMes[month]) {
+      ventasPorMes[month] = [];
+    }
+    ventasPorMes[month].push({ date: sale.createdAt, price: sale.price });
+  });
+
   if (!sales) throw new Error("Sales not found");
   if (!sales[0]) throw new Error("There isn't sales");
-  return sales;
+  // return sales;
+  return ventasPorMes;
+};
+export const getSalesPerDay = async () => {
+  const sales = await Sale.findAll({ order: [["createdAt", "ASC"]] });
+  const salesPerDay: any[] = [];
+
+  sales.forEach((sale: any) => {
+    const day: any = moment(sale.createdAt).format("YYYY-MM-DD");
+    const existingDay = salesPerDay.find((item: any) => item.day == day);
+    console.log("exist", existingDay);
+    if (existingDay) {
+      existingDay.sales += 1; // Incrementar el contador si ya hay ventas para ese día
+    } else {
+      salesPerDay.push({ day, sales: 1 }); // Agregar un nuevo objeto si es la primera venta de ese día
+    }
+  });
+
+  return salesPerDay;
 };
 
 export const getSaleId = async (id: string) => {

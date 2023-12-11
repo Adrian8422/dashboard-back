@@ -52,3 +52,17 @@ TERMINAR CREATE SALES ESTOY CON EL BODY DE POSTMAN
 
 FIJARME SI EN EL CREATE SALE USAR QUERY O PARAMS PARA TRAER ID DEL P´RODUCTO CON EL CUAL PODEMOS CREAR EL SALE 
 
+
+
+TENGO QUE ARREGLAR EL MIDDLEWARE QUE REVISA SI ES AUTH, PORQUE NO ESTA FUNCIONANDO BIEN ME DEJA AVANZAR done !
+
+crear endpoint para cambiar roles de usuarios, retornar lista de usuarios client done !
+
+ARREGLAR MIDDLEWARES DE AUTH Y VERIFICACION ADMIN    done !
+
+
+implementar nuevos endpoints tasks a frontendm como tambien el cambio de rol
+crear modelo notificacion para que aparezca una notificacion cuando creo una tarea o cualquier otra cosa, creacion de producto o cualquier modificacion. 
+Crear tambien listado de usuarios en el front para poder ver que usuarios hay y cambiar roles si soy admin. Tambien crear listado de suppliers crear crud alli y acomodar las lecturas de los canvas para que me muestre las estadisticas correctamente
+
+ver si en notifications es necesario agregar si es task o supplier o alguna otra cosa, ya tengo la referencia de id
