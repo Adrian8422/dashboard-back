@@ -24,6 +24,7 @@ import { Product } from "./models/product";
 import {
   createSupplier,
   deleteSupplier,
+  getSupplierId,
   getSuppliers,
   updateSupplier,
 } from "./controllers/supplier";
@@ -44,6 +45,7 @@ import {
 } from "./controllers/sales";
 import {
   completeTask,
+  deleteManyTasks,
   createTask,
   deleteTask,
   getTaskId,
@@ -350,6 +352,27 @@ app.get("/suppliers", authMiddleware, async (req: any, res) => {
     res.send(suppliers);
   } catch (error: any) {
     if (error.message == "Suppliers not found") {
+      res.status(404).send({ error: error.message });
+    } else {
+      res.status(500).send({
+        error: error.message,
+      });
+    }
+  }
+});
+app.get("/supplier/:id", authMiddleware, async (req: any, res) => {
+  try {
+    const { id } = req.params;
+    if (!req.user || req.user.rol !== "admin") {
+      res
+        .status(401)
+        .send({ error: "User not found or your admin role isn't" });
+      return new Error("User not found or your admin role isn't");
+    }
+    const suppliers = await getSupplierId(id);
+    res.send(suppliers);
+  } catch (error: any) {
+    if (error.message == "Supplier id not found") {
       res.status(404).send({ error: error.message });
     } else {
       res.status(500).send({
@@ -665,6 +688,20 @@ app.delete("/delete-task/:id", authMiddleware, async (req: any, res) => {
     const response = await deleteTask(id);
 
     res.send(response.message);
+  } catch (error: any) {
+    if (error.message == "There isn't task")
+      res.status(404).send({ error: error.message });
+    else if (!req.user) res.status(401).send({ error: "Unauthorized" });
+    else res.status(500).send({ error: error.message });
+  }
+});
+app.delete("/delete-tasks/", authMiddleware, async (req: any, res) => {
+  console.log(req.user);
+  try {
+    const ids = req.body;
+    const response = await deleteManyTasks(ids);
+
+    res.send(response);
   } catch (error: any) {
     if (error.message == "There isn't task")
       res.status(404).send({ error: error.message });

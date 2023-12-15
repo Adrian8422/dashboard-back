@@ -66,3 +66,6 @@ crear modelo notificacion para que aparezca una notificacion cuando creo una tar
 Crear tambien listado de usuarios en el front para poder ver que usuarios hay y cambiar roles si soy admin. Tambien crear listado de suppliers crear crud alli y acomodar las lecturas de los canvas para que me muestre las estadisticas correctamente
 
 ver si en notifications es necesario agregar si es task o supplier o alguna otra cosa, ya tengo la referencia de id
+
+
+NOTIFICACIONES POR AHORA SOLO FUNCIONA CON EL CRUD DE TASKS

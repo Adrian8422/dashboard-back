@@ -14,15 +14,15 @@ Supplier.init(
       allowNull: true, // Puedes ajustar según tus necesidades
     },
     cellphone: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true, // O ajusta según tus necesidades
     },
     email: {
       type: DataTypes.STRING,
       allowNull: true, // O ajusta según tus necesidades
-      validate: {
-        isEmail: true, // Valida que el campo sea un correo electrónico válido
-      },
+      // validate: {
+      //   isEmail: true, // Valida que el campo sea un correo electrónico válido
+      // },
     },
     createdAt: {
       type: DataTypes.DATE,

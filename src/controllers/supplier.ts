@@ -32,6 +32,11 @@ export const getSuppliers = async () => {
   }
   return suppliers;
 };
+export const getSupplierId = async (id: string) => {
+  const supplier = await Supplier.findByPk(id);
+  if (!supplier) throw new Error("Supplier id not found");
+  return supplier.dataValues;
+};
 
 export const deleteSupplier = async (id: string) => {
   const supplier = await Supplier.findByPk(id);
