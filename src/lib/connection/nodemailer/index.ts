@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 // myem ewkz bmmb nese
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: process.env.NODEMAILER_HOST,
   port: 587,
   secure: false, // upgrade later with STARTTLS
   auth: {
