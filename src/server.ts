@@ -737,4 +737,4 @@ app.get("/notifications", authMiddleware, async (req, res) => {
 app.listen(port, () =>
   console.log("service connected http://localhost:" + port)
 );
-// sequelize.sync({ alter: true });
+sequelize.sync({ alter: true });

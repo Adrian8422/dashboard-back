@@ -6,8 +6,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // upgrade later with STARTTLS
   auth: {
-    user: "adrian.tag.villegas@gmail.com",
-    pass: "myemewkzbmmbnese",
+    user: process.env.NODEMAILER_USER,
+    pass: process.env.NODEMAILER_PASS,
   },
 });
 
