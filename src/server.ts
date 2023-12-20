@@ -204,9 +204,9 @@ app.post("/create-product", authMiddleware, async (req: any, res) => {
         .send({ error: "User not found or your admin role isn't" });
       return new Error("User not found or your admin role isn't");
     }
-
+    const {email} = req.user
     const dataProduct = req.body;
-    const newProduct = await createProduct(dataProduct).catch((err: any) => {
+    const newProduct = await createProduct(dataProduct,email).catch((err: any) => {
       res.status(401).send(err);
     });
     res.send(newProduct);

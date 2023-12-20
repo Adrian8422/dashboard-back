@@ -1,4 +1,5 @@
 import { Categorie } from "../models/categorie";
+import { Notification } from "../models/notification";
 import { Product } from "../models/product";
 import { Supplier } from "../models/supplier";
 type InputValueProduct = {
@@ -10,7 +11,7 @@ type InputValueProduct = {
   categoriesId: string;
 };
 
-export const createProduct = async (data: any) => {
+export const createProduct = async (data: any, email: any) => {
   try {
     // aqui aplicar logica de busqueda de ese producto con ese nombre para que si ese producto ya existe no lo cree de nuevo sino que sume uno al stock del que ya hay
     const findProduct = await Product.findOne({ where: { title: data.title } });
@@ -45,6 +46,12 @@ export const createProduct = async (data: any) => {
     });
     newProduct.dataValues.categoriesName = categorie.dataValues.name;
 
+    const notification = await Notification.create({
+      title: `New product created by user ${email}`,
+      notes: "Click here and we redirect you to the new product",
+      createdBy: email,
+      idReference: newProduct.dataValues.id,
+    });
     return newProduct.dataValues;
   } catch (error) {
     console.log(error);
