@@ -46,7 +46,7 @@ export const createProduct = async (data: any, email: any) => {
     });
     newProduct.dataValues.categoriesName = categorie.dataValues.name;
 
-    const notification = await Notification.create({
+    await Notification.create({
       title: `New product created by user ${email}`,
       notes: "Click here and we redirect you to the new product",
       createdBy: email,

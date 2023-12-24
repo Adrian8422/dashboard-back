@@ -53,6 +53,7 @@ import {
   updateTask,
 } from "./controllers/tasks";
 import { getNotifications } from "./controllers/notification";
+import { getUsersClients } from "./controllers/user";
 
 const port = process.env.PORT || 3000;
 
@@ -204,11 +205,13 @@ app.post("/create-product", authMiddleware, async (req: any, res) => {
         .send({ error: "User not found or your admin role isn't" });
       return new Error("User not found or your admin role isn't");
     }
-    const {email} = req.user
+    const { email } = req.user;
     const dataProduct = req.body;
-    const newProduct = await createProduct(dataProduct,email).catch((err: any) => {
-      res.status(401).send(err);
-    });
+    const newProduct = await createProduct(dataProduct, email).catch(
+      (err: any) => {
+        res.status(401).send(err);
+      }
+    );
     res.send(newProduct);
   } catch (error: any) {
     if (error.message == "We can't create this product") {
@@ -615,47 +618,37 @@ app.delete(
 );
 // TASKS SECTION
 
-app.post(
-  "/create-task",
-  authMiddleware,
-  checkAdminMiddleware,
-  async (req: any, res) => {
-    try {
-      const { email } = req.user;
-      const data = req.body;
-      const response = await createTask(data, email);
-      res.send(response);
-    } catch (error: any) {
-      if (error.message == "You need to be login")
-        res.status(401).send({ error: error.message });
-      else if (error.message == "We could't create this task")
-        res.status(402).send({ error: error.message });
-      else res.status(500).send({ error: error.message });
-    }
+app.post("/create-task", authMiddleware, async (req: any, res) => {
+  try {
+    const { email } = req.user;
+    const data = req.body;
+    const response = await createTask(data, email);
+    res.send(response);
+  } catch (error: any) {
+    if (error.message == "You need to be login")
+      res.status(401).send({ error: error.message });
+    else if (error.message == "We could't create this task")
+      res.status(402).send({ error: error.message });
+    else res.status(500).send({ error: error.message });
   }
-);
-app.patch(
-  "/update-task/:id",
-  authMiddleware,
-  checkAdminMiddleware,
-  async (req: any, res) => {
-    try {
-      const { id } = req.params;
-      const { email } = req.user;
-      const data = req.body;
-      const response = await updateTask(id, data, email);
-      res.send(response);
-    } catch (error: any) {
-      if (error.message == "You need to be login")
-        res.status(401).send({ error: error.message });
-      else if (error.message == "Not found this task")
-        res.status(402).send({ error: error.message });
-      else if (error.message == "User not created this task")
-        res.status(402).send({ error: error.message });
-      else res.status(500).send({ error: error.message });
-    }
+});
+app.patch("/update-task/:id", authMiddleware, async (req: any, res) => {
+  try {
+    const { id } = req.params;
+    const { email } = req.user;
+    const data = req.body;
+    const response = await updateTask(id, data, email);
+    res.send(response);
+  } catch (error: any) {
+    if (error.message == "You need to be login")
+      res.status(401).send({ error: error.message });
+    else if (error.message == "Not found this task")
+      res.status(402).send({ error: error.message });
+    else if (error.message == "User not created this task")
+      res.status(402).send({ error: error.message });
+    else res.status(500).send({ error: error.message });
   }
-);
+});
 app.get("/tasks", authMiddleware, async (req: any, res) => {
   try {
     const response = await getTasks();
@@ -734,6 +727,20 @@ app.get("/notifications", authMiddleware, async (req, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
+
+/// USERS CLIENT
+
+app.get("/users-clients", authMiddleware, async (req, res) => {
+  try {
+    const response = await getUsersClients();
+    res.send(response);
+  } catch (error: any) {
+    if (error.message == "Users not found")
+      res.status(404).send({ error: error.message });
+    else res.status(500).send({ error: error.message });
+  }
+});
+
 app.listen(port, () =>
   console.log("service connected http://localhost:" + port)
 );
