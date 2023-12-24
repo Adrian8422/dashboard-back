@@ -53,7 +53,7 @@ import {
   updateTask,
 } from "./controllers/tasks";
 import { getNotifications } from "./controllers/notification";
-import { getUsersClients } from "./controllers/user";
+import { getUsers } from "./controllers/user";
 
 const port = process.env.PORT || 3000;
 
@@ -730,9 +730,9 @@ app.get("/notifications", authMiddleware, async (req, res) => {
 
 /// USERS CLIENT
 
-app.get("/users-clients", authMiddleware, async (req, res) => {
+app.get("/users", authMiddleware, async (req, res) => {
   try {
-    const response = await getUsersClients();
+    const response = await getUsers();
     res.send(response);
   } catch (error: any) {
     if (error.message == "Users not found")
