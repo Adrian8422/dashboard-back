@@ -8,7 +8,7 @@ export const sequelize = new Sequelize(url, {
 // export const sequelize = new Sequelize({
 //   host: "localhost",
 //   dialect: "postgres",
-//   port: 5433,
+//   port: 5432,
 //   username: "postgres",
 //   password: "adrian",
 //   database: "postgres",

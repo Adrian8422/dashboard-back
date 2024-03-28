@@ -59,7 +59,12 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+app.use(
+  cors({
+    origin: "https://dashboard-front-8ak1.vercel.app",
+  })
+);
 
 // SECTION USER
 app.post("/signup", async (req, res) => {
