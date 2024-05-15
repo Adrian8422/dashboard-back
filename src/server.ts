@@ -59,20 +59,8 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.json());
-
-const whitelist = [
-  "http://localhost:3000",
-  "https://dashboard-front-8ak1.vercel.app/",
-]; // assuming front-end application is running on localhost port 3000
-
 const corsOptions = {
-  origin: function (origin: any, callback: any) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: ["http://localhost:3000", "https://dashboard-front-8ak1.vercel.app/"],
 };
 
 app.use(cors(corsOptions));
