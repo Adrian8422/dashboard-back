@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-console.log(transporter);
+console.log("Here error", transporter);
 
 export async function send(email: string, code: number) {
   console.log(email, code);

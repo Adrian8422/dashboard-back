@@ -165,6 +165,7 @@ app.patch(
 // SECTION PRODUCT
 
 app.get("/products", authMiddleware, async (req: any, res) => {
+  console.log("ENTRO ACAAA");
   try {
     if (!req.user) {
       res.status(401).send({ error: "User not found" });
