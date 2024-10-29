@@ -60,7 +60,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://dashboard-front-8ak1.vercel.app"],
+  origin: ["*"],
 };
 
 app.use(cors(corsOptions));
