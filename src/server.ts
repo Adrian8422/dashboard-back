@@ -68,14 +68,14 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // SECTION USER
-app.post("/signup", async (req, res) => {
+app.post("/signup", async (req, res:any) => {
   const { email, age, rol, name, lastname } = req.body;
 
   const createUser = await sendCode({ email, age, name, lastname });
 
   res.send(createUser);
 });
-app.post("/signin", async (req: any, res) => {
+app.post("/signin", async (req: any, res:any) => {
   try {
     const { email, code } = req.body;
     const response = await signInUser(email, code);
@@ -92,7 +92,7 @@ app.post("/signin", async (req: any, res) => {
     } else res.status(500).send({ error: error.message });
   }
 });
-app.get("/me", authMiddleware, async (req: any, res) => {
+app.get("/me", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user) {
       res
@@ -113,7 +113,7 @@ app.get("/me", authMiddleware, async (req: any, res) => {
   }
 });
 // In this endpoint we can modified only the global data, we can't modify fields such as 'email' and 'rol'
-app.patch("/update-user", authMiddleware, async (req: any, res) => {
+app.patch("/update-user", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user) {
       res
@@ -145,7 +145,7 @@ app.patch(
   "/change-rol/:id",
   authMiddleware,
   checkAdminMiddleware,
-  async (req: any, res) => {
+  async (req: any, res:any) => {
     try {
       console.log(req.user);
       const { id } = req.params;
@@ -166,7 +166,7 @@ app.patch(
 
 // SECTION PRODUCT
 
-app.get("/products", authMiddleware, async (req: any, res) => {
+app.get("/products", authMiddleware, async (req: any, res:any) => {
   console.log("ENTRO ACAAA");
   try {
     if (!req.user) {
@@ -186,7 +186,7 @@ app.get("/products", authMiddleware, async (req: any, res) => {
     }
   }
 });
-app.get("/product/:id", authMiddleware, async (req: any, res) => {
+app.get("/product/:id", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user) {
       res.status(401).send({ error: "User not found" });
@@ -204,7 +204,7 @@ app.get("/product/:id", authMiddleware, async (req: any, res) => {
   }
 });
 
-app.post("/create-product", authMiddleware, async (req: any, res) => {
+app.post("/create-product", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user || req.user.rol !== "admin") {
       res
@@ -228,7 +228,7 @@ app.post("/create-product", authMiddleware, async (req: any, res) => {
     }
   }
 });
-app.patch("/update-product/:id", authMiddleware, async (req: any, res) => {
+app.patch("/update-product/:id", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user || req.user.rol !== "admin") {
       res
@@ -257,7 +257,7 @@ app.patch("/update-product/:id", authMiddleware, async (req: any, res) => {
   }
 });
 
-app.delete("/delete-product/:id", authMiddleware, async (req: any, res) => {
+app.delete("/delete-product/:id", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user || req.user.rol !== "admin") {
       res
@@ -282,7 +282,7 @@ app.delete("/delete-product/:id", authMiddleware, async (req: any, res) => {
 
 // SECTION SUPPLIER
 
-app.post("/create-supplier", authMiddleware, async (req: any, res) => {
+app.post("/create-supplier", authMiddleware, async (req: any, res:any) => {
   try {
     if (
       !req.user ||
@@ -318,7 +318,7 @@ app.post("/create-supplier", authMiddleware, async (req: any, res) => {
     }
   }
 });
-app.patch("/update-supplier/:id", authMiddleware, async (req: any, res) => {
+app.patch("/update-supplier/:id", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user || req.user.rol !== "admin") {
       res
@@ -350,7 +350,7 @@ app.patch("/update-supplier/:id", authMiddleware, async (req: any, res) => {
   }
 });
 
-app.get("/suppliers", authMiddleware, async (req: any, res) => {
+app.get("/suppliers", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user || req.user.rol !== "admin") {
       res
@@ -370,7 +370,7 @@ app.get("/suppliers", authMiddleware, async (req: any, res) => {
     }
   }
 });
-app.get("/supplier/:id", authMiddleware, async (req: any, res) => {
+app.get("/supplier/:id", authMiddleware, async (req: any, res:any) => {
   try {
     const { id } = req.params;
     if (!req.user || req.user.rol !== "admin") {
@@ -391,7 +391,7 @@ app.get("/supplier/:id", authMiddleware, async (req: any, res) => {
     }
   }
 });
-app.delete("/delete-supplier/:id", authMiddleware, async (req: any, res) => {
+app.delete("/delete-supplier/:id", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user || req.user.rol !== "admin") {
       res
@@ -421,7 +421,7 @@ app.delete("/delete-supplier/:id", authMiddleware, async (req: any, res) => {
 
 // Section categories
 
-app.post("/create-categorie", authMiddleware, async (req: any, res) => {
+app.post("/create-categorie", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user || req.user.rol !== "admin") {
       res
@@ -451,7 +451,7 @@ app.post("/create-categorie", authMiddleware, async (req: any, res) => {
     }
   }
 });
-app.get("/categories", authMiddleware, async (req: any, res) => {
+app.get("/categories", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user) {
       res.status(401).send({ error: "User not found" });
@@ -467,7 +467,7 @@ app.get("/categories", authMiddleware, async (req: any, res) => {
     }
   }
 });
-app.get("/categorie/:id", authMiddleware, async (req: any, res) => {
+app.get("/categorie/:id", authMiddleware, async (req: any, res:any) => {
   try {
     if (!req.user) {
       res.status(401).send({ error: "User not found" });
@@ -486,7 +486,7 @@ app.patch(
   "/update-categorie/:id",
   authMiddleware,
   checkAdminMiddleware,
-  async (req: any, res) => {
+  async (req: any, res:any) => {
     try {
       const { id } = req.params;
       const dataValues = req.body;
@@ -512,7 +512,7 @@ app.delete(
   "/delete-categorie/:id",
   authMiddleware,
   checkAdminMiddleware,
-  async (req: any, res) => {
+  async (req: any, res:any) => {
     try {
       const { id } = req.params;
       const { message } = await deleteCategorie(id);
@@ -527,7 +527,7 @@ app.delete(
 
 // Section SALES
 
-app.get("/sales", authMiddleware, async (req, res) => {
+app.get("/sales", authMiddleware, async (req:any, res:any) => {
   try {
     const sales = await allSales();
     res.send(sales);
@@ -537,7 +537,7 @@ app.get("/sales", authMiddleware, async (req, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
-app.get("/sales-per-day", authMiddleware, async (req, res) => {
+app.get("/sales-per-day", authMiddleware, async (req:any, res:any) => {
   try {
     const sales = await getSalesPerDay();
     res.send(sales);
@@ -547,7 +547,7 @@ app.get("/sales-per-day", authMiddleware, async (req, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
-app.get("/sale/:id", authMiddleware, async (req: any, res) => {
+app.get("/sale/:id", authMiddleware, async (req: any, res:any) => {
   try {
     const { id } = req.params;
     const sale = await getSaleId(id);
@@ -562,7 +562,7 @@ app.post(
   "/:productId/create-sale",
   authMiddleware,
   checkAdminMiddleware,
-  async (req: any, res) => {
+  async (req: any, res:any) => {
     try {
       const dataValues = req.body;
       if (!dataValues || Object.keys(dataValues).length === 0) {
@@ -587,7 +587,7 @@ app.patch(
   "/update-sale/:id",
   authMiddleware,
   checkAdminMiddleware,
-  async (req: any, res) => {
+  async (req: any, res:any) => {
     try {
       const { email } = req.user;
       const dataValues = req.body;
@@ -611,7 +611,7 @@ app.delete(
   "/delete-sale/:id",
   authMiddleware,
   checkAdminMiddleware,
-  async (req: any, res) => {
+  async (req: any, res:any) => {
     try {
       const { id } = req.params;
       const { message } = await deleteSale(id);
@@ -625,7 +625,7 @@ app.delete(
 );
 // TASKS SECTION
 
-app.post("/create-task", authMiddleware, async (req: any, res) => {
+app.post("/create-task", authMiddleware, async (req: any, res:any) => {
   try {
     const { email } = req.user;
     const data = req.body;
@@ -639,7 +639,7 @@ app.post("/create-task", authMiddleware, async (req: any, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
-app.patch("/update-task/:id", authMiddleware, async (req: any, res) => {
+app.patch("/update-task/:id", authMiddleware, async (req: any, res:any) => {
   try {
     const { id } = req.params;
     const { email } = req.user;
@@ -656,7 +656,7 @@ app.patch("/update-task/:id", authMiddleware, async (req: any, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
-app.get("/tasks", authMiddleware, async (req: any, res) => {
+app.get("/tasks", authMiddleware, async (req: any, res:any) => {
   try {
     const response = await getTasks();
 
@@ -667,7 +667,7 @@ app.get("/tasks", authMiddleware, async (req: any, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
-app.get("/task/:id", authMiddleware, async (req: any, res) => {
+app.get("/task/:id", authMiddleware, async (req: any, res:any) => {
   console.log(req.user);
   try {
     const { id } = req.params;
@@ -681,7 +681,7 @@ app.get("/task/:id", authMiddleware, async (req: any, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
-app.delete("/delete-task/:id", authMiddleware, async (req: any, res) => {
+app.delete("/delete-task/:id", authMiddleware, async (req: any, res:any) => {
   console.log(req.user);
   try {
     const { id } = req.params;
@@ -695,7 +695,7 @@ app.delete("/delete-task/:id", authMiddleware, async (req: any, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
-app.delete("/delete-tasks/", authMiddleware, async (req: any, res) => {
+app.delete("/delete-tasks/", authMiddleware, async (req: any, res:any) => {
   console.log(req.user);
   try {
     const ids = req.body;
@@ -709,7 +709,7 @@ app.delete("/delete-tasks/", authMiddleware, async (req: any, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
-app.patch("/task-done/:id", authMiddleware, async (req: any, res) => {
+app.patch("/task-done/:id", authMiddleware, async (req: any, res:any) => {
   console.log(req.user);
   try {
     const { done } = req.body;
@@ -724,7 +724,7 @@ app.patch("/task-done/:id", authMiddleware, async (req: any, res) => {
     else res.status(500).send({ error: error.message });
   }
 });
-app.get("/notifications", authMiddleware, async (req, res) => {
+app.get("/notifications", authMiddleware, async (req:any, res:any) => {
   try {
     const response = await getNotifications();
     res.send(response);
@@ -737,7 +737,7 @@ app.get("/notifications", authMiddleware, async (req, res) => {
 
 /// USERS CLIENT
 
-app.get("/users", authMiddleware, async (req, res) => {
+app.get("/users", authMiddleware, async (req:any, res:any) => {
   try {
     const response = await getUsers();
     res.send(response);
